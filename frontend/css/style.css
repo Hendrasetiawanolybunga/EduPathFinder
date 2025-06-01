@@ -1,0 +1,89 @@
+/* Tailwind CSS Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Gaya Kustom Tambahan */
+body {
+  @apply bg-white text-gray-800;
+  font-family: 'Inter', sans-serif; 
+}
+
+
+
+.btn {
+  @apply py-2 px-4 rounded-md font-semibold transition-colors duration-300;
+}
+
+.btn-primary {
+  @apply bg-navy-700 text-white;
+}
+
+.btn-primary:hover {
+  @apply bg-navy-800;
+}
+
+.btn-secondary {
+  @apply bg-gray-200 text-gray-700;
+}
+
+.btn-secondary:hover {
+  @apply bg-gray-300;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  @apply w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-navy-500 focus:border-transparent transition-shadow duration-300;
+}
+
+.input-group label {
+  @apply block mb-1 font-medium text-navy-700;
+}
+
+.error-message {
+  @apply text-red-500 text-sm mt-1;
+}
+
+.hidden {
+  display: none !important; 
+}
+
+/* Styling untuk loading indicator */
+#loadingIndicator {
+  @apply fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50;
+}
+
+.spinner {
+  @apply w-12 h-12 border-4 border-gray-200 border-t-navy-700 rounded-full animate-spin;
+}
+
+/* Styling untuk halaman hasil */
+#resultPage {
+  @apply p-6 bg-gray-50 rounded-lg shadow-md;
+}
+
+#resultPage h2 {
+  @apply text-2xl font-bold text-navy-700 mb-4;
+}
+
+#recommendationResult div {
+  @apply mb-3;
+}
+
+#recommendationResult strong {
+  @apply font-semibold text-navy-700;
+}
+
+/* Responsiveness */
+@media (max-width: 640px) {
+  .step-container {
+    @apply p-4;
+  }
+  .button-group {
+    @apply flex-col space-y-2;
+  }
+  .button-group .btn {
+    @apply w-full;
+  }
+}
