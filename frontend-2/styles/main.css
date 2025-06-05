@@ -1,0 +1,78 @@
+/* Main Styles for EduPathFinder */
+
+/* Custom Variables */
+:root {
+  --navy-blue: #001f3f;
+  --white: #ffffff;
+}
+
+/* Global Styles */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+/* Navbar Customization */
+.navbar {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Form Styles */
+.form-control:focus {
+  border-color: var(--navy-blue);
+  box-shadow: 0 0 0 0.2rem rgba(0, 31, 63, 0.25);
+}
+
+/* Custom Buttons */
+.btn-navy {
+  background-color: var(--navy-blue);
+  color: var(--white);
+  border: none;
+}
+
+.btn-navy:hover {
+  background-color: #002f5f;
+  color: var(--white);
+}
+
+/* Loading Spinner */
+.spinner-navy {
+  color: var(--navy-blue);
+}
+
+/* Progress Bar */
+.progress-bar.bg-navy {
+  background-color: var(--navy-blue);
+}
+
+/* Card Customization */
+.card {
+  transition: transform 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}

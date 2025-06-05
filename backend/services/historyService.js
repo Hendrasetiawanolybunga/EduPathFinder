@@ -1,8 +1,22 @@
 /**
- * historyService.js - Service untuk menangani riwayat rekomendasi
+ * historyService.js - Service untuk menangani operasi database riwayat rekomendasi
  */
 
-const db = require('../config/database');
+const Database = require('better-sqlite3');
+const path = require('path');
+
+// Inisialisasi database
+const db = new Database(path.join(__dirname, '../data/recommendations.db'));
+
+// Buat tabel jika belum ada
+db.exec(`
+    CREATE TABLE IF NOT EXISTS recommendation_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        input_data TEXT NOT NULL,
+        recommendations TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+`);
 
 /**
  * Mendapatkan riwayat rekomendasi dengan pagination

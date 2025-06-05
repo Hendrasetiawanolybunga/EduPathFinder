@@ -10,7 +10,7 @@ module.exports = [
         path: '/api/history',
         handler: historyController.getHistory,
         options: {
-            description: 'Mendapatkan riwayat rekomendasi',
+            description: 'Mendapatkan daftar riwayat rekomendasi',
             tags: ['api', 'history']
         }
     },

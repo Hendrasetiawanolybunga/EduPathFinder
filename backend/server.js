@@ -38,6 +38,19 @@ const init = async () => {
         Vision
     ]);
 
+    // Serve static files for ML model
+    server.route({
+        method: 'GET',
+        path: '/model/{param*}',
+        handler: {
+            directory: {
+                path: Path.join(__dirname, '../ml-model-2/model_tfjs'),
+                listing: false,
+                index: false
+            }
+        }
+    });
+
     // Register routes
     server.route([
         ...recommendRoutes,

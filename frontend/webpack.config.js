@@ -1,7 +1,3 @@
-/**
- * webpack.config.js - Konfigurasi Webpack untuk frontend
- */
-
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -12,7 +8,7 @@ module.exports = (env, argv) => {
     const isProduction = argv.mode === 'production';
     
     return {
-        entry: './js/index.js',
+        entry: path.resolve(__dirname, 'js', 'index.js'),
         output: {
             path: path.resolve(__dirname, 'dist'),
             filename: 'js/[name].[contenthash].js',

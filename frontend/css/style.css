@@ -6,10 +6,21 @@
 /* Gaya Kustom Tambahan */
 body {
   @apply bg-white text-gray-800;
-  font-family: 'Inter', sans-serif; 
+  font-family: 'Inter', sans-serif;
 }
 
+/* Navbar Styling */
+.nav-link {
+  @apply text-white hover:text-navy-200 transition-colors duration-300;
+}
 
+.nav-link.active {
+  @apply text-navy-200 font-semibold;
+}
+
+#main-content {
+  @apply pt-16 min-h-screen;
+}
 
 .btn {
   @apply py-2 px-4 rounded-md font-semibold transition-colors duration-300;
@@ -46,7 +57,7 @@ body {
 }
 
 .hidden {
-  display: none !important; 
+  display: none !important;
 }
 
 /* Styling untuk loading indicator */

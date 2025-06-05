@@ -129,49 +129,133 @@ function validateStep(stepNumber) {
 
 /**
  * Menangani submit form
- * @param {Event} event - Event submit
+ * @param {Event} event - Event submit form
  */
 async function handleSubmit(event) {
     event.preventDefault();
-
+    
     if (!validateStep(currentStep)) {
-        return; // Jangan submit jika validasi terakhir gagal
+        return;
     }
 
     const form = event.target;
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    // Konversi usia ke number
-    if (data.usia) {
-        data.usia = parseInt(data.usia);
-    }
-
-    showLoading(true);
+    const userData = {
+        nilai_matematika: formData.get('nilai_matematika'),
+        nilai_ipa: formData.get('nilai_ipa'),
+        nilai_ips: formData.get('nilai_ips'),
+        nilai_bahasa: formData.get('nilai_bahasa'),
+        minat_sains: formData.get('minat_sains'),
+        minat_sosial: formData.get('minat_sosial'),
+        minat_bahasa: formData.get('minat_bahasa'),
+        minat_kejuruan: formData.get('minat_kejuruan'),
+        skill_komputer: formData.get('skill_komputer'),
+        skill_olahraga: formData.get('skill_olahraga'),
+        skill_seni: formData.get('skill_seni'),
+        skill_musik: formData.get('skill_musik'),
+        prefer_kerja_tim: formData.get('prefer_kerja_tim'),
+        prefer_kerja_individu: formData.get('prefer_kerja_individu'),
+        prefer_dalam_ruangan: formData.get('prefer_dalam_ruangan'),
+        prefer_luar_ruangan: formData.get('prefer_luar_ruangan')
+    };
 
     try {
-        const response = await fetch('/api/recommend', {
+        const loadingElement = document.getElementById('loadingIndicator');
+        const resultElement = document.getElementById('recommendationResult');
+        
+        if (loadingElement) loadingElement.classList.remove('hidden');
+        
+        const response = await fetch('http://localhost:3000/api/recommend', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(userData)
         });
 
-        const result = await response.json();
-        showLoading(false);
-
-        if (response.ok && result.status === 'success') {
-            displayRecommendation(result.data);
-        } else {
-            displayError(result.message || 'Terjadi kesalahan saat mengambil rekomendasi.');
+        if (!response.ok) {
+            throw new Error('Gagal mendapatkan rekomendasi');
         }
+
+        const result = await response.json();
+        
+        if (loadingElement) loadingElement.classList.add('hidden');
+        
+        if (resultElement) {
+            resultElement.innerHTML = generateRecommendationHTML(result);
+            resultElement.classList.remove('hidden');
+            // Scroll ke hasil
+            resultElement.scrollIntoView({ behavior: 'smooth' });
+        }
+
     } catch (error) {
-        showLoading(false);
-        console.error('Error submitting form:', error);
-        displayError('Tidak dapat terhubung ke server. Silakan coba lagi nanti.');
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat memproses rekomendasi. Silakan coba lagi.');
     }
 }
+
+/**
+ * Menghasilkan HTML untuk menampilkan rekomendasi
+ * @param {Array} recommendations - Array rekomendasi karir
+ * @returns {string} HTML string
+ */
+function generateRecommendationHTML(result) {
+    const { topRecommendations, confidenceScore, mainField, additionalInfo } = result;
+
+    let html = `
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <h3 class="text-2xl font-bold mb-4">Rekomendasi Karir</h3>
+            
+            <div class="mb-6">
+                <p class="text-lg mb-2">Bidang Utama: <span class="font-semibold">${mainField}</span></p>
+                <p class="text-gray-600">${additionalInfo.fieldDescription}</p>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500">Tingkat Kepercayaan: ${confidenceScore}%</p>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="text-xl font-semibold mb-3">Top 5 Rekomendasi Karir:</h4>
+                <div class="space-y-3">
+                    ${topRecommendations.map((rec, index) => `
+                        <div class="p-3 ${index === 0 ? 'bg-blue-50' : 'bg-gray-50'} rounded-lg">
+                            <p class="font-medium">${index + 1}. ${rec.career}</p>
+                            <p class="text-sm text-gray-600">Probabilitas: ${rec.probability}%</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="text-xl font-semibold mb-3">Skill yang Dibutuhkan:</h4>
+                <div class="flex flex-wrap gap-2">
+                    ${additionalInfo.requiredSkills.map(skill => `
+                        <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">${skill}</span>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h4 class="text-xl font-semibold mb-3">Jalur Pendidikan:</h4>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <p class="font-medium mb-2">Program Studi: ${additionalInfo.educationPath.degree}</p>
+                    <p class="text-sm text-gray-600 mb-2">Durasi: ${additionalInfo.educationPath.duration}</p>
+                    <div class="mt-2">
+                        <p class="font-medium mb-1">Sertifikasi yang Disarankan:</p>
+                        <ul class="list-disc list-inside text-sm text-gray-600">
+                            ${additionalInfo.educationPath.certifications.map(cert => `
+                                <li>${cert}</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return html;
+}
+// }
 
 /**
  * Menampilkan hasil rekomendasi
